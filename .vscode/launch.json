@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SpringfieldApplication<springfield>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.springfield.cidade.SpringfieldApplication",
+            "projectName": "springfield",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
