@@ -21,13 +21,21 @@ import lombok.EqualsAndHashCode;
 public class Cidadao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String nome;
     private String endereco;
     private String bairro;
 
-    public Cidadao(CidadaoRequestDTO data){
+    // Construtor sem ID (usado ao criar um novo cidadão)
+    public Cidadao(String nome, String endereco, String bairro) {
+        this.nome = nome;
+        this.endereco = endereco;
+        this.bairro = bairro;
+    }
+
+    // Construtor a partir de um DTO
+    public Cidadao(CidadaoRequestDTO data) {
         this.nome = data.nome();
         this.endereco = data.endereco();
         this.bairro = data.bairro();

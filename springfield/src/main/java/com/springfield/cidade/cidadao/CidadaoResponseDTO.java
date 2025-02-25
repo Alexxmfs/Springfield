@@ -1,7 +1,7 @@
 package com.springfield.cidade.cidadao;
 
 public record CidadaoResponseDTO(
-    Long id,
+    Integer id,
     String nome,
     String endereco,
     String bairro
