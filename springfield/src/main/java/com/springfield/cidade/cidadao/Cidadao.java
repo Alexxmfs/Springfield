@@ -27,14 +27,12 @@ public class Cidadao {
     private String endereco;
     private String bairro;
 
-    // Construtor sem ID (usado ao criar um novo cidadão)
     public Cidadao(String nome, String endereco, String bairro) {
         this.nome = nome;
         this.endereco = endereco;
         this.bairro = bairro;
     }
 
-    // Construtor a partir de um DTO
     public Cidadao(CidadaoRequestDTO data) {
         this.nome = data.nome();
         this.endereco = data.endereco();

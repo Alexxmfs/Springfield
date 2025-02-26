@@ -6,3 +6,39 @@ CREATE TABLE CAD_CIDADAO (
     endereco VARCHAR(255),
     bairro VARCHAR(255)
 );
+
+CREATE TABLE CAD_USUARIO_CIDADAO (
+    ID SERIAL PRIMARY KEY,
+    CIDADAO_ID INT UNIQUE REFERENCES CAD_CIDADAO(ID),
+    USERNAME VARCHAR(255) UNIQUE NOT NULL,
+    SENHA VARCHAR(255) NOT NULL,
+    BLOQUEADO BOOLEAN DEFAULT FALSE,
+    TENTATIVAS_LOGIN INT DEFAULT 0,
+    ULTIMA_TROCA_SENHA TIMESTAMP
+);
+
+Cadastrar usuário
+POST http://localhost:8080/usuarios/cadastro
+{
+    "cidadaoId": 10000,
+    "username": "joaosilva",
+    "senha": "123456"
+}
+
+Login
+POST http://localhost:8080/usuarios/login
+{
+    "username": "joaosilva",
+    "senha": "123456"
+}
+
+Trocar senha
+POST http://localhost:8080/usuarios/troca-senha
+{
+    "username": "joaosilva",
+    "senhaAtual": "123456",
+    "novaSenha": "novaSenha123"
+}
+
+Desbloquear Usuario
+http://localhost:8080/usuarios/desbloqueio/alexMacedo
