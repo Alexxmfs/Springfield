@@ -27,13 +27,13 @@ public class ParcelaIPTU {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer idCidadao; // ID do cidadão que vai vir do outro serviço
-    private int numeroParcela; // 1 a 12
+    private Integer idCidadao; 
+    private int numeroParcela; 
     private double valor;
     private boolean paga = false;
 
     @Enumerated(EnumType.STRING)
-    private StatusParcela status = StatusParcela.SOLICITADO; // ou AGUARDANDO_ANALISE ou CONCLUIDO
+    private StatusParcela status = StatusParcela.SOLICITADO;
 
     private LocalDate dataVencimento;
     private LocalDate dataPagamento;

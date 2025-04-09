@@ -5,7 +5,6 @@ public class CidadaoDTO {
     private String nome;
     private String cpf;
 
-    // Getter e Setter para id
     public Integer getId() {
         return id;
     }
@@ -14,7 +13,6 @@ public class CidadaoDTO {
         this.id = id;
     }
 
-    // Getter e Setter para nome
     public String getNome() {
         return nome;
     }
@@ -23,7 +21,6 @@ public class CidadaoDTO {
         this.nome = nome;
     }
 
-    // Getter e Setter para cpf
     public String getCpf() {
         return cpf;
     }
