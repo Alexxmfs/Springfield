@@ -1,13 +1,19 @@
 package com.prefeitura.iptu.controller;
 
+import com.prefeitura.iptu.CidadaoClient;
+import com.prefeitura.iptu.CidadaoDTO;
+import com.prefeitura.iptu.ParcelaIPTUResponseDTO;
 import com.prefeitura.iptu.iptu.ParcelaIPTU;
-import com.prefeitura.iptu.iptu.StatusParcela;
 import com.prefeitura.iptu.iptu.ParcelaIPTURepository;
+import com.prefeitura.iptu.iptu.StatusParcela;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/parcelas")
@@ -16,19 +22,32 @@ public class ParcelaIPTUController {
     @Autowired
     private ParcelaIPTURepository repository;
 
+    @Autowired
+    private CidadaoClient cidadaoClient;
+
     @GetMapping
     public List<ParcelaIPTU> listarTodas() {
         return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ParcelaIPTU buscarPorId(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public ParcelaIPTUResponseDTO buscarPorId(@PathVariable Long id) {
+        Optional<ParcelaIPTU> parcelaOpt = repository.findById(id);
+        if (parcelaOpt.isPresent()) {
+            ParcelaIPTU parcela = parcelaOpt.get();
+            CidadaoDTO cidadao = cidadaoClient.buscarCidadaoPorId(parcela.getIdCidadao());
+            return new ParcelaIPTUResponseDTO(parcela, cidadao.getNome());
+        }
+        return null;
     }
 
     @GetMapping("/cidadao/{idCidadao}")
-    public List<ParcelaIPTU> buscarPorCidadao(@PathVariable Integer idCidadao) {
-        return repository.findByIdCidadao(idCidadao);
+    public List<ParcelaIPTUResponseDTO> buscarPorCidadao(@PathVariable Integer idCidadao) {
+        List<ParcelaIPTU> parcelas = repository.findByIdCidadao(idCidadao);
+        CidadaoDTO cidadao = cidadaoClient.buscarCidadaoPorId(idCidadao);
+        return parcelas.stream()
+                .map(parcela -> new ParcelaIPTUResponseDTO(parcela, cidadao.getNome()))
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -49,13 +68,14 @@ public class ParcelaIPTUController {
     }
 
     @PatchMapping("/{id}/pagar")
-    public ParcelaIPTU pagar(@PathVariable Long id) {
+    public ResponseEntity<String> pagar(@PathVariable Long id) {
         return repository.findById(id).map(parcela -> {
             parcela.setPaga(true);
             parcela.setStatus(StatusParcela.CONCLUIDO);
             parcela.setDataPagamento(LocalDate.now());
-            return repository.save(parcela);
-        }).orElse(null);
+            repository.save(parcela);
+            return ResponseEntity.ok("Parcela paga com sucesso!");
+        }).orElse(ResponseEntity.status(404).body("ID desconhecido"));
     }
 
     @DeleteMapping("/{id}")
