@@ -64,3 +64,5 @@ CREATE TABLE CAD_USUARIO_CIDADAO (
 
 <h4>Desbloquear Usuario</h4>
 <h4>http://localhost:8080/usuarios/desbloqueio/alexMacedo</h4>
+
+http://localhost:8081/parcelas/cidadao/10004
